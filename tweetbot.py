@@ -1,9 +1,13 @@
-import oauth2, datetime, time, urllib2, json, tweepy
+import os, oauth2, datetime, time, urllib2, json, tweepy
 
 ########
 # CONSTANTS
 ########
 
+CONSUMER_KEY = os.environ['HEROKU_CONSUMER_KEY']
+CONSUMER_SECRET = os.environ['HEROKU_CONSUMER_SECRET']
+ACCESS_TOKEN = os.environ['HEROKU_ACCESS_TOKEN']
+ACCESS_SECRET = os.environ['HEROKU_ACCESS_SECRET']
 
 
 class Search(object):
