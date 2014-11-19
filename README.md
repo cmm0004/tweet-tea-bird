@@ -1,2 +1,2 @@
-tweetbot
+tweet-tea-bird
 ========
