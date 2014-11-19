@@ -43,23 +43,29 @@ class Search(object):
                 response = urllib2.Request(url)
 
                 data = json.load(urllib2.urlopen(response))
-                return data
+                if data:
+                    return data
+                else:
+                    return False
             except urllib2.HTTPError:
-                print "Http error"
-                return None
+                print "Http error" + str(urllib2.HTTPError.code)
+                return False
             
     def favorite_hashtag(self, hashtag_query):
         query = self.search(hashtag_query, 5)
-        statuses = query['statuses']
-        for tweet in statuses:
-            try:
-                TWITTER_BOT.create_favorite(tweet['id'])
-                print "favorited status: " + str(tweet['id'])
-                print datetime.datetime.now()
-            except tweepy.TweepError:
-                print "favorite failed on status: " + str(tweet['id'])
-                print datetime.datetime.now()
-                
+        if query:
+            statuses = query['statuses']
+            for tweet in statuses:
+                try:
+                    TWITTER_BOT.create_favorite(tweet['id'])
+                    print "SUCCESS status: " + str(tweet['id'])
+                    print datetime.datetime.now()
+                except tweepy.TweepError:
+                    print "favorite failed on status: " + str(tweet['id'])
+                    print datetime.datetime.now()
+
+        else:
+            return                
 
 ############
 ##############
@@ -84,5 +90,6 @@ if __name__ == "__main__":
     favorite = Search()
     while True:
         favorite.favorite_hashtag("#teasontheloose")
+        favorite.favorite_hashtag("@TeasontheLoose")
     
         time.sleep(14400)
