@@ -1,4 +1,4 @@
-import os, oauth2, datetime, time, urllib2, json, tweepy
+import os, oauth2, datetime, time, urllib2, json, tweepy, random
 
 ########
 # CONSTANTS
@@ -83,6 +83,30 @@ class API(object):
 #############
 #############
    
+def mention_new_follower():
+    followers = TWITTER_BOT.followers()
+    most_recent = followers[0].screen_name
+
+    saved_follower = open("./fixtures/most_recent.txt","r")
+    s_f = saved_follower.read()
+    saved_follower.close()
+    if s_f != most_recent:
+        new_saved_follower = open("./fixtures/most_recent.txt","w")
+        new_saved_follower.write(most_recent)
+        new_saved_follower.close()
+        lines = open("./fixtures/msgs_to_followers.txt").read().splitlines()
+        mention = "@" + str(most_recent)
+        try:
+            
+            TWITTER_BOT.update_status(mention + " " + random.choice(lines))
+            print "successfully mentioned new follower: " + most_recent
+            print datetime.datetime.now()
+        except tweepy.TweepError:
+            print "mention failed on new follower " + most_recent
+            print datetime.datetime.now()
+    else:
+        print "No new followers"
+            
 
 if __name__ == "__main__":
     twitter = API()
@@ -91,5 +115,6 @@ if __name__ == "__main__":
     while True:
         favorite.favorite_hashtag("#teasontheloose")
         favorite.favorite_hashtag("@TeasontheLoose")
+        mention_new_follower()
     
         time.sleep(14400)
