@@ -116,6 +116,7 @@ if __name__ == "__main__":
         favorite.favorite_hashtag("#teasontheloose")
         favorite.favorite_hashtag("@TeasontheLoose")
         favorite.favorite_hashtag("#Thanksgiving")
+        favorite.favorite_hashtag("#turkey")
         
     
         time.sleep(14400)
