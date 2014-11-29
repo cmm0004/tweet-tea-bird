@@ -117,9 +117,15 @@ class Follower(object):
         else:
             print "already following " + str(self.most_recent) + ", did not mention."
             
-
-
-            
+    def poach_followers(self, target, number):
+        targets_followers = TWITTER_BOT.followers(screen_name=target, count=number)
+        for follower in targets_followers:
+            try:
+                TWITTER_BOT.create_friendship(screen_name=follower.screen_name)
+                print "followed new follower " + str(follower.screen_name), datetime.datetime.now()
+            except tweepy.TweepError:
+                print 'error, didn\'t follow ' + str(follower.screen_name), datetime.datetime.now()
+                
 
 if __name__ == "__main__":
     twitter = API()
@@ -130,7 +136,9 @@ if __name__ == "__main__":
         favorite.favorite_hashtag("#teasontheloose")
         favorite.favorite_hashtag("@TeasontheLoose")
         followers.mention_new_follower()
-        
+        followers.poach_followers('TEAVANA', 10)
+        followers.poach_followers('DAVIDsTEA', 10)
+        followers.poach_followers('AdagioTeas', 10)        
       
         
     
