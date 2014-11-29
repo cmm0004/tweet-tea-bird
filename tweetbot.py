@@ -83,38 +83,54 @@ class API(object):
 #############
 #############
    
-def mention_new_follower():
-    followers = TWITTER_BOT.followers()
-    most_recent = followers[0].screen_name
+class Follower(object):
+    def __init__(self):
+        self.followers = TWITTER_BOT.followers()
+        self.most_recent = self.followers[0].screen_name
 
-    saved_follower = open("./fixtures/most_recent.txt","r")
-    s_f = saved_follower.read()
-    saved_follower.close()
-    if s_f != most_recent:
-        new_saved_follower = open("./fixtures/most_recent.txt","w")
-        new_saved_follower.write(most_recent)
-        new_saved_follower.close()
-        lines = open("./fixtures/msgs_to_followers.txt").read().splitlines()
-        mention = "@" + str(most_recent)
-        try:
+    def _follow_most_recent(self):
+        TWITTER_BOT.create_friendship(screen_name=self.most_recent)
+
+    def _am_following(self):
+        friendship = TWITTER_BOT.show_friendship(source_screen_name='TeasontheLoose', target_screen_name=self.most_recent)
+
+        return friendship[0].following
+                                                
+                                                 
+    def mention_new_follower(self):
+        am_following = self._am_following()
+        
+        
+        #if not already following the most recent follower:
+        if not am_following:
+            lines = open("./fixtures/msgs_to_followers.txt").read().splitlines()
+            mention = "@" + str(self.most_recent)
+            try:
+                TWITTER_BOT.update_status(mention + " " + random.choice(lines))
+                print "successfully mentioned new follower: " + str(self.most_recent), datetime.datetime.now()
+                self._follow_most_recent()
+                print "followed new follower " + str(self.most_recent), datetime.datetime.now()
+                
+            except tweepy.TweepError:
+                print "mention failed on new follower " + most_recent
+                print datetime.datetime.now()
+        else:
+            print "already following " + str(self.most_recent) + ", did not mention."
             
-            TWITTER_BOT.update_status(mention + " " + random.choice(lines))
-            print "successfully mentioned new follower: " + most_recent
-            print datetime.datetime.now()
-        except tweepy.TweepError:
-            print "mention failed on new follower " + most_recent
-            print datetime.datetime.now()
-    else:
-        print "No new followers"
+
+
             
 
 if __name__ == "__main__":
     twitter = API()
     TWITTER_BOT = twitter.authenticate()
     favorite = Search()
+    followers = Follower()
     while True:
         favorite.favorite_hashtag("#teasontheloose")
         favorite.favorite_hashtag("@TeasontheLoose")
+        followers.mention_new_follower()
+        
       
         
     
