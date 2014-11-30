@@ -136,9 +136,7 @@ if __name__ == "__main__":
         favorite.favorite_hashtag("#teasontheloose")
         favorite.favorite_hashtag("@TeasontheLoose")
         followers.mention_new_follower()
-        followers.poach_followers('TEAVANA', 10)
-        followers.poach_followers('DAVIDsTEA', 10)
-        followers.poach_followers('AdagioTeas', 10)        
+                
       
         
     
