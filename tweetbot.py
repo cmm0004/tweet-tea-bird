@@ -91,11 +91,13 @@ class Follower(object):
     def _follow_most_recent(self):
         TWITTER_BOT.create_friendship(screen_name=self.most_recent)
 
-    def _am_following(self):
+     def _am_following(self):
         friendship = TWITTER_BOT.show_friendship(source_screen_name='TeasontheLoose', target_screen_name=self.most_recent)
-
-        return friendship[0].following
-                                                
+        #check if friendship[0].following or friendship[0].following_requested are true
+        if friendship[0].following or friendship[0].following_requested:
+            return True
+        else:
+            return False                                                
                                                  
     def mention_new_follower(self):
         am_following = self._am_following()
