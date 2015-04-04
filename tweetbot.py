@@ -89,10 +89,11 @@ class Follower(object):
         self.most_recent = self.followers[0].screen_name
 
     def _follow_most_recent(self):
-        if not _check_name_nsfw():
-            TWITTER_BOT.create_friendship(screen_name=self.most_recent)
+        if _check_name_nsfw():
+            print 'nsfw name didnt follow'
+            return
         else:
-            print 'nsfw name, didnt follow'
+            TWITTER_BOT.create_friendship(screen_name=self.most_recent)
 
     def _am_following(self):
         friendship = TWITTER_BOT.show_friendship(source_screen_name='TeasontheLoose', target_screen_name=self.most_recent)
@@ -106,12 +107,12 @@ class Follower(object):
     def mention_new_follower(self):
         am_following = self._am_following()
 
-        if not self._check_name_nsfw():
+        if self._check_name_nsfw():
             print "nsfw name, didnt mention"
             return       
 
         #if not already following the most recent follower:
-        
+
         if not am_following:
             lines = open("./fixtures/msgs_to_followers.txt").read().splitlines()
             mention = "@" + str(self.most_recent)
