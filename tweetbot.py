@@ -89,7 +89,7 @@ class Follower(object):
         self.most_recent = self.followers[0].screen_name
 
     def _follow_most_recent(self):
-        if _check_name_nsfw():
+        if self._check_name_nsfw():
             print 'nsfw name didnt follow'
             return
         else:
@@ -123,7 +123,7 @@ class Follower(object):
                 print "followed new follower " + str(self.most_recent), datetime.datetime.now()
                 
             except tweepy.TweepError:
-                print "mention failed on new follower " + most_recent
+                print "mention failed on new follower " + self.most_recent
                 print datetime.datetime.now()
         else:
             print "already following " + str(self.most_recent) + ", did not mention."
